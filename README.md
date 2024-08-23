@@ -12,6 +12,9 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
 - [ ] Abstract
 - [ ] Preface
 - [ ] Bibliography
+- [ ] List of figures
+- [ ] List of tables
+- [ ] List of listings
 
 # Acknowledgements
 Thanks to: 
