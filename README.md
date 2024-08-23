@@ -6,12 +6,13 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
 
 # Todo: 
 - [ ] Styling for:
-  - [ ] Code blocks
+  - [x] Code blocks
   - [ ] Tables
-- [ ] Subfigures
+- [x] Subfigures
 - [ ] Abstract
 - [ ] Preface
-- [ ] Bibliography
+- [ ] Code block captions
+- [x] Bibliography
 - [ ] List of figures
 - [ ] List of tables
 - [ ] List of listings
