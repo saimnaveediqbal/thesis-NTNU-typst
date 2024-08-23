@@ -1,4 +1,19 @@
 # NTNU thesis template
 Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Typst.
 
-A complete example is shown in the example folder; see example.pdf for the rendered PDF. The document structure can of course be adapted to your needs.
+> [!NOTE]  
+> This is still a work in progress!
+
+# Todo: 
+- [ ] Styling for:
+  - [ ] Code blocks
+  - [ ] Tables
+- [ ] Subfigures
+- [ ] Abstract
+- [ ] Preface
+- [ ] Bibliography
+
+# Acknowledgements
+Thanks to: 
+- The creator of the [ILM template](https://github.com/talal/ilm/blob/main/lib.typ) which I used as the basis for this. 
+- The creators of the [NTNU thesis template](https://github.com/COPCSE-NTNU/thesis-NTNU)
