@@ -7,7 +7,8 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
 # Todo: 
 - [ ] Styling for:
   - [x] Code blocks
-  - [ ] Tables
+  - [x] Tables
+  - [ ] Header and footer
   - [ ] Lists
 - [x] Subfigures
 - [ ] Abstract
@@ -15,7 +16,8 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
 - [x] Code block captions
 - [x] Bibliography
 - [ ] Norwegian language support
-- [x] Proper figure numbering 
+- [x] Proper figure numbering
+
 
 # Acknowledgements
 Thanks to: 
