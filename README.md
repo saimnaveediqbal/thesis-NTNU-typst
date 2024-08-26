@@ -18,6 +18,7 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
 - [ ] Norwegian language support
 - [x] Proper figure numbering
 - [ ] Short title in header
+- [ ] Multiple authors
 
 
 # Acknowledgements
