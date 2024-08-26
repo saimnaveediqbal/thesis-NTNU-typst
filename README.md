@@ -11,11 +11,12 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
 - [x] Subfigures
 - [ ] Abstract
 - [ ] Preface
-- [ ] Code block captions
+- [x] Code block captions
 - [x] Bibliography
 - [ ] List of figures
 - [ ] List of tables
 - [ ] List of listings
+- [x] Proper figure numbering 
 
 # Acknowledgements
 Thanks to: 
