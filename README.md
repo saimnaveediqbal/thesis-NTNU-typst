@@ -8,8 +8,8 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
 - [ ] Styling for:
   - [x] Code blocks
   - [x] Tables
-  - [ ] Header and footer
-  - [ ] Lists
+  - [x] Header and footer
+  - [x] Lists
 - [x] Subfigures
 - [ ] Abstract
 - [ ] Preface
@@ -18,7 +18,8 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
 - [ ] Norwegian language support
 - [x] Proper figure numbering
 - [ ] Short title in header
-- [ ] Multiple authors
+- [x] Multiple authors
+- [ ] Start chapters on only odd pages
 
 
 # Acknowledgements
