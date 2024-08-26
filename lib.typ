@@ -21,7 +21,9 @@
 
 #let ntnu-thesis(
   title: [Title],
-  author: "Author",
+  short-title: [Short title],
+  authors: ("Author"),
+  titlepage: true,
   paper-size: "a4",
   date: datetime.today(),
   date-format: "[day padding:zero]/[month repr:numerical]/[year repr:full]",
@@ -31,20 +33,20 @@
   bibliography: none,
   chapter-pagebreak: true,
   figure-index: (
-    enabled: false,
-    title: "",
+    enabled: true,
+    title: "Figures",
   ),
   table-index: (
-    enabled: false,
-    title: "",
+    enabled: true,
+    title: "Tables",
   ),
   listing-index: (
-    enabled: false,
-    title: "",
+    enabled: true,
+    title: "Code listings",
   ),
   body,
 ) =  {
-  set document(title: title, author: author)
+  set document(title: title, author: authors)
   // Set text fonts and sizes
   set text(font: "Charter", size: 11pt)
   show raw: set text(font: "DejaVu Sans Mono", size: 9pt)
@@ -52,26 +54,63 @@
   set page(
     paper: paper-size,
     margin: (bottom: 4.5cm, top:4cm, left:4cm, right: 4cm),
-    numbering: "1"
   )
-  
-  // Cover page
-  page(align(center + horizon, block(width: 90%)[
-      #let v-space = v(2em, weak: true)
-      #text(2em)[*#title*]
+  // Configure page numbering and footer.
+  set page(
+    header: context {
+      // Get current page number.
+      let i = counter(page).at(here()).first()
 
-      #v-space
-      #text(1.1em, author)
-      
-      #if date != none {
-        v-space
-        // Display date as MMMM DD, YYYY  
-        text(1.1em, date.display(date-format))
+      // Align right for even pages and left for odd.
+      let is-odd = calc.odd(i)
+      let aln = if is-odd { right } else { left }
+
+      // Are we on a page that starts a chapter?
+      let target = heading.where(level: 1)
+      if query(target).any(it => it.location().page() == i) {
+        return
       }
-  ]))
+
+      // Find the chapter of the section we are currently in.
+      let before = query(target.before(here()))
+      if before.len() > 0 {
+        let current = before.last()
+        let chapter = emph(text(size: 10pt, current.body))
+        if current.numbering != none {
+            if is-odd {
+              columns(2,
+              [#align(left)[#chapter] #colbreak() #align(right)[#i]])
+            } else {
+              columns(2,
+              [#align(left)[#i] #colbreak() #align(right)[#chapter]])
+            }
+        }
+      }
+    },
+    footer: none
+  )
+  // Cover page
+  if titlepage {
+    page(align(center + horizon, block(width: 90%)[
+        #let v-space = v(2em, weak: true)
+        #text(2em)[*#title*]
+
+        #v-space 
+        #for author in authors {
+          text(1.1em, author)
+          v(0.7em, weak: true)
+        }
+        
+        #if date != none {
+          v-space
+          // Display date as MMMM DD, YYYY  
+          text(1.1em, date.display(date-format))
+        }
+    ]))
+  }
   //Paragraph properties
-  set par(leading: 0.7em, justify: true, linebreaks: "optimized")
-  show par: set block(spacing: 1.35em)
+  set par(leading: 0.7em, justify: true, linebreaks: "optimized", first-line-indent: 1.2em)
+  show par: set block(spacing: 0.7em)
 
   //Properties for all headings (incl. subheadings)
   set heading(numbering: "1.1")
@@ -90,6 +129,7 @@
     v(10%)
     if it.numbering != none {
       set text(size: 20pt)
+      set par(first-line-indent: 0em)
       text("Chapter ")
       numbering("1.1", ..counter(heading).at(it.location()))
     }
@@ -114,6 +154,9 @@
     set outline(indent: true, depth: 3)
     table-of-contents
   }
+  
+
+  
   // Display inline code in a small box that retains the correct baseline.
   show raw.where(block: false): box.with(
     inset: (x: 3pt, y: 0pt),
@@ -149,35 +192,13 @@
     kind: table
   ): set figure.caption(position: top)
   
-   // Display indices of figures, tables, and listings.
-  let fig-t(kind) = figure.where(kind: kind)
-  let has-fig(kind) = counter(fig-t(kind)).get().at(0) > 0
-  if figure-index.enabled or table-index.enabled or listing-index.enabled {
-    show outline: set heading(outlined: true)
-    context {
-      let imgs = figure-index.enabled and has-fig(image)
-      let tbls = table-index.enabled and has-fig(table)
-      let lsts = listing-index.enabled and has-fig(raw)
-      if imgs or tbls or lsts {
-        // Note that we pagebreak only once instead of each each
-        // individual index. This is because for documents that only have a couple of
-        // figures, starting each index on new page would result in superfluous
-        // whitespace.
-        pagebreak()
-      }
+  //Style lists
+  set enum(numbering: "1.a.i.", spacing: 0.8em, indent: 1.2em)
+  set list(spacing: 0.8em, indent: 1.2em, marker: ([•], [◦], [--]))
 
-      if imgs { outline(title: figure-index.at("title", default: "Index of Figures"), target: fig-t(image)) }
-      if tbls { outline(title: table-index.at("title", default: "Index of Tables"), target: fig-t(table)) }
-      if lsts { outline(title: listing-index.at("title", default: "Index of Listings"), target: fig-t(raw)) }
-    }
-  }
+  body
   
-  //Body in brackets to style alone
-  {
-    // Properties for main headings (Chapters)
-    
-    body
-  }
+  
   
   //Style bibliography
   if bibliography != none {
@@ -188,13 +209,17 @@
     bibliography
   }
 }
+
+
 //Style appendix
 #let appendix(body) = {
+  set heading(numbering: "A.1")
   show heading: it => {
     colbreak(weak: true)
     v(10%)
     if it.numbering != none {
       set text(size: 20pt)
+      set par(first-line-indent: 0em)
       text("Appendix ")
       numbering("A.1", ..counter(heading).at(it.location()))
     }
