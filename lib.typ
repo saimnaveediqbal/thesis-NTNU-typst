@@ -1,4 +1,5 @@
 #import "@preview/subpar:0.1.1"
+#import "@preview/physica:0.9.3": *
 
 #let stroke-color = luma(200)
 #let fill-color = luma(250)
@@ -80,6 +81,7 @@
     it
     v(1.5em, weak: true)
   }
+  
   // Properties for main headings (i.e "Chapters")
   show heading.where(level: 1): it => {
     //Show chapters on new page
@@ -101,7 +103,6 @@
   if preface != none {
       page(preface)
   } 
-
 
   // Display table of contents.
   if table-of-contents != none {
@@ -126,8 +127,27 @@
     stroke: stroke-color,
     width: 100%,
   )
-  // Configure equation numbering.
-  set math.equation(numbering: "(1)")
+  show raw.where(block: true): set align(start)
+  show figure.where(
+    kind: raw
+  ): set figure.caption(position: top)
+
+  // Configure proper numbering.
+  let numbering-fig = n => {
+    let h1 = counter(heading).get().first()
+    numbering("1.1", h1, n)
+  }
+  show figure: set figure(numbering: numbering-fig)
+  let numbering-eq = n => {
+    let h1 = counter(heading).get().first()
+    numbering("(1.1)", h1, n)
+  }
+  set math.equation(numbering: numbering-eq)
+
+  //Set table caption on top
+  show figure.where(
+    kind: table
+  ): set figure.caption(position: top)
   
    // Display indices of figures, tables, and listings.
   let fig-t(kind) = figure.where(kind: kind)
@@ -159,7 +179,7 @@
     body
   }
   
-  //Show bibliography
+  //Style bibliography
   if bibliography != none {
     pagebreak()
     show std-bibliography: set text(0.95em)
@@ -167,5 +187,41 @@
     show std-bibliography: set par(leading: 0.65em, justify: false, linebreaks: auto)
     bibliography
   }
+}
+//Style appendix
+#let appendix(body) = {
+  show heading: it => {
+    colbreak(weak: true)
+    v(10%)
+    if it.numbering != none {
+      set text(size: 20pt)
+      text("Appendix ")
+      numbering("A.1", ..counter(heading).at(it.location()))
+    }
+    v(1.4em, weak: true)
+    set text(size: 24pt)
+    block(it.body)
+    v(1.8em, weak: true)
+  }
+  // Reset heading counter
+  counter(heading).update(0)
   
+  // Equation numbering
+  let numbering-eq = n => {
+    let h1 = counter(heading).get().first()
+    numbering("(A.1)", h1, n)
+  }
+  set math.equation(numbering: numbering-eq)
+  
+  // Figure and Table numbering
+  let numbering-fig = n => {
+    let h1 = counter(heading).get().first()
+    numbering("A.1", h1, n)
+  }
+  show figure.where(kind: image): set figure(numbering: numbering-fig)
+  show figure.where(kind: table): set figure(numbering: numbering-fig)
+  
+  isappendix.update(true)
+    
+  body
 }
