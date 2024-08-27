@@ -36,7 +36,7 @@
   title: [Title],
   short-title: [],
   authors: ("Author"),
-  shortauthor: "",
+  short-author: none,
   paper-size: "a4",
   date: datetime.today(),
   date-format: "[day padding:zero]/[month repr:numerical]/[year repr:full]",
@@ -209,13 +209,22 @@
         } else {
           display-title = emph(text(size: 10pt, title))
         }
+        if short-author != none {
+          display-title = emph(text(size: 10pt, short-author)) + [: ] + display-title
+        }
         if current.numbering != none {
             if is-odd {
-              columns(2,
-              [#align(left)[#chapter] #colbreak() #align(right)[#i]])
+              grid(
+                columns: (4fr, 1fr),
+                align(left)[#chapter],
+                align(right)[#i],
+              )
             } else {
-              columns(2,
-              [#align(left)[#i] #colbreak() #align(right)[#display-title]])
+              grid(
+                columns: (1fr, 4fr),
+                align(left)[#i],
+                align(right)[#display-title],
+              )
             }
         }
       }
