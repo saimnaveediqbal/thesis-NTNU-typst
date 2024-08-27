@@ -1,34 +1,31 @@
 #import "lib.typ": *
-
+#let chapters-on-odd = false
 #show: ntnu-thesis.with(
   title: [An NTNU Thesis typst template],
-  short-title: [Template],
-  authors: ("Author", "test"),
+  short-title: [],
+  authors: ("Anders Andersen", "Bjørn Bjørnsen"),
+  shortauthor: ("Andersen et. al."),
   titlepage: true,
+  chapters-on-odd: chapters-on-odd,
   bibliography: bibliography("thesis.bib"),
   figure-index: (enabled: true, title: "Figures"),
   table-index: (enabled: true, title: "Tables"),
-  listing-index: (enabled: true, title: "Code listings")
+  listing-index: (enabled: true, title: "Code listings"),
+  abstract-en: [
+    The `ntnu-thesis` template is a typst port of the `ntnuthesis` LaTeX class. It can be used for theses at all levels –
+    bachelor, master and PhD – and is available in English (British and
+    American) and Norwegian (Bokmål and Nynorsk). This document is ment to
+    serve (i) as a description of the document class, (ii) as an example of
+    how to use it, and (iii) as a thesis template.
+  ],
+  abstract-no: [
+    Malen `ntnu-thesis` er en typst-oversettelse av LaTeX-klassen `ntnuthesis`. Den er tilrettelagt for avhandlinger på alle nivåer –
+    bachelor, master og PhD – og er tilgjengelig på både norsk (bokmål og
+    nynorsk) og engelsk (britisk og amerikansk). Dette dokumentet er ment å
+    tjene (i) som en beskrivelse av dokumentklassen, (ii) som et eksempel på
+    bruken av den, og (iii) som en mal for avhandlingen.
+  ],
 )
-#outline(target: figure.where(kind: image), title: "Figures")
-#outline(target: figure.where(kind: table), title: "Tables")
-#outline(target: figure.where(kind: raw), title: "Code Listings")
-
-#heading(numbering: none)[Abstract]
-<abstract>
-The `ntnu-thesis` template is a typst port of the `ntnuthesis` LaTeX class. It can be used for theses at all levels –
-bachelor, master and PhD – and is available in English (British and
-American) and Norwegian (Bokmål and Nynorsk). This document is ment to
-serve (i) as a description of the document class, (ii) as an example of
-how to use it, and (iii) as a thesis template.
-
-#heading(numbering: none)[Sammendrag]
-<sammendrag>
-Malen `ntnu-thesis` er en typst-oversettelse av LaTeX-klassen `ntnuthesis`. Den er tilrettelagt for avhandlinger på alle nivåer –
-bachelor, master og PhD – og er tilgjengelig på både norsk (bokmål og
-nynorsk) og engelsk (britisk og amerikansk). Dette dokumentet er ment å
-tjene (i) som en beskrivelse av dokumentklassen, (ii) som et eksempel på
-bruken av den, og (iii) som en mal for avhandlingen.
 
 = Introduction
 <introduction>
@@ -41,7 +38,7 @@ it, and (iii) as a thesis template.
 
 = Using the Template
 <chap:usage>
-== Thesis Setup and Language Selection
+== Thesis Setup
 <sec:setup>
 The document class is initialized by calling
 ```typst #show: ntnu-thesis.with()``` at the beginning of your `.typ` file. Currently it only supports english. The `ntnu-thesis` function has a number of options you can set, most of which will be described in this document. The rest will be documented in this templates repository. 
@@ -57,9 +54,6 @@ for PhD.]
 The title of your thesis should be set by changing the `title` parameter of the template. The title will appear on the titlepage as well as in the running header of the even numbered pages. If the title is too long for the header, you can use `shorttitle` to set a version for the header.
 
 The authors should be listed with full names in the `authors` parameter. This is an array, with multiple authors separated by a comma. 
-For the running headers, you may want to use `shortauthor`, e.g. like this:
-`shortauthor: A. Andersen and B. Bjørnsen` or even
-`shortauthorAndersen et al.`.
 
 Use `date` to set the date of the document. It will only appear on
 the temporary title page. To keep track of temporary versions, it can be
@@ -67,16 +61,15 @@ a good idea to use `date: datetime.today()` while working on the thesis.
 
 == Page Layout
 <page-layout>
-TODO: fix this:
 The document class is designed to work with twosided printing. This
 means that all chapters start on odd (right hand) pages, and that blank
 pages are inserted where needed to make sure this happens. However,
 since the theses are very often read on displays, the margins are kept
 the same on even and odd pages in order to avoid that the page is
-jumping back and forth upon reading.
+jumping back and forth upon reading. 
 
-To avoid blank pages when rendering the thesis, you can set
-`oneside: true`.
+By default this is turned off. You can turn it on by setting
+`chapters-on-odd: false` at the top of the file.
 
 == Structuring Elements
 <structuring-elements>
@@ -206,7 +199,6 @@ fragment (incomplete sentence), it should not be punctuated.
 
 #figure(caption: "Python code in typst")[
 ```python
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -639,7 +631,7 @@ share with the readers, can be put in appendices. See
 You definitely should use the `ntnu-thesis` typst template for your
 thesis.
 
-#show: appendix
+#show: appendix.with(chapters-on-odd: chapters-on-odd)
 = Additional Material
 <app:additional>
 Additional material that does not fit in the main thesis but may still
@@ -647,5 +639,3 @@ be relevant to share, e.g., raw data from experiments and surveys, code
 listings, additional plots, pre-project reports, project agreements,
 contracts, logs etc., can be put in appendices. Simply issue the command
 ```#show: appendix``` in the main `.typ` file, and make one chapter per appendix.
-
-
