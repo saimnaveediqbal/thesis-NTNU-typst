@@ -11,15 +11,15 @@ Port of [thesis-NTNU](https://github.com/COPCSE-NTNU/thesis-NTNU) template to Ty
   - [x] Header and footer
   - [x] Lists
 - [x] Subfigures
-- [ ] Abstract
-- [ ] Preface
+- [x] Abstract
+- [x] Preface
 - [x] Code block captions
 - [x] Bibliography
 - [ ] Norwegian language support
 - [x] Proper figure numbering
-- [ ] Short title in header
+- [x] Short title in header
 - [x] Multiple authors
-- [ ] Start chapters on only odd pages
+- [x] Start chapters on only odd pages
 
 
 # Acknowledgements
