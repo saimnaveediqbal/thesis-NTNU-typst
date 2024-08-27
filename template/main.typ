@@ -1,4 +1,4 @@
-#import "lib.typ": *
+#import "../lib.typ": *
 #let chapters-on-odd = false
 #show: ntnu-thesis.with(
   title: [An NTNU Thesis typst template],

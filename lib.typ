@@ -111,8 +111,8 @@
     if chapters-on-odd {
       pagebreak(to: "odd", weak: false)
     } 
-    //Show chapters on new page
     else if chapter-pagebreak {
+      //Show chapters on new page
       colbreak(weak: true)
     }
     //Display heading as two lines, a "Chapter # \n heading"
