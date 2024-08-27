@@ -2,10 +2,23 @@
 #import "@preview/physica:0.9.3": *
 
 #let stroke-color = luma(200)
-#let fill-color = luma(250)
 #let std-bibliography = bibliography
-
 #let isappendix = state("isappendix", false)
+
+#let front-matter(body) = {
+  set page(numbering: "i")
+  set heading(numbering: none)
+  body
+}
+
+#let main-matter(body) = {
+  set page(numbering: "1")
+  counter(page).update(1)
+  counter(heading).update(0)
+  set heading(numbering: "1.1")
+  body
+}
+
 #let subfigure = {
   subpar.grid.with(
     numbering: n => if isappendix.get() {numbering("A.1", counter(heading).get().first(), n)
@@ -21,17 +34,20 @@
 
 #let ntnu-thesis(
   title: [Title],
-  short-title: [Short title],
+  short-title: [],
   authors: ("Author"),
-  titlepage: true,
+  shortauthor: "",
   paper-size: "a4",
   date: datetime.today(),
   date-format: "[day padding:zero]/[month repr:numerical]/[year repr:full]",
-  abstract: none,
+  abstract-en: none,
+  abstract-no: none,
   preface: none,
   table-of-contents: outline(),
+  titlepage: true,
   bibliography: none,
   chapter-pagebreak: true,
+  chapters-on-odd: false,
   figure-index: (
     enabled: true,
     title: "Figures",
@@ -54,40 +70,6 @@
   set page(
     paper: paper-size,
     margin: (bottom: 4.5cm, top:4cm, left:4cm, right: 4cm),
-  )
-  // Configure page numbering and footer.
-  set page(
-    header: context {
-      // Get current page number.
-      let i = counter(page).at(here()).first()
-
-      // Align right for even pages and left for odd.
-      let is-odd = calc.odd(i)
-      let aln = if is-odd { right } else { left }
-
-      // Are we on a page that starts a chapter?
-      let target = heading.where(level: 1)
-      if query(target).any(it => it.location().page() == i) {
-        return
-      }
-
-      // Find the chapter of the section we are currently in.
-      let before = query(target.before(here()))
-      if before.len() > 0 {
-        let current = before.last()
-        let chapter = emph(text(size: 10pt, current.body))
-        if current.numbering != none {
-            if is-odd {
-              columns(2,
-              [#align(left)[#chapter] #colbreak() #align(right)[#i]])
-            } else {
-              columns(2,
-              [#align(left)[#i] #colbreak() #align(right)[#chapter]])
-            }
-        }
-      }
-    },
-    footer: none
   )
   // Cover page
   if titlepage {
@@ -114,22 +96,31 @@
 
   //Properties for all headings (incl. subheadings)
   set heading(numbering: "1.1")
+  set heading(supplement: [Chapter ])
   show heading: set text(hyphenate: false)
   show heading: it => {
     v(2.5em, weak: true)
     it
     v(1.5em, weak: true)
   }
-  
+  show: front-matter
+
   // Properties for main headings (i.e "Chapters")
   show heading.where(level: 1): it => {
+    //Show chapters only on odd pages:
+    if chapters-on-odd {
+      pagebreak(to: "odd", weak: false)
+    } 
     //Show chapters on new page
-    if chapter-pagebreak { colbreak(weak: true) }
+    else if chapter-pagebreak {
+      colbreak(weak: true)
+    }
     //Display heading as two lines, a "Chapter # \n heading"
     v(10%)
     if it.numbering != none {
       set text(size: 20pt)
       set par(first-line-indent: 0em)
+      
       text("Chapter ")
       numbering("1.1", ..counter(heading).at(it.location()))
     }
@@ -139,9 +130,26 @@
     v(1.8em, weak: true)
   }
   
+  //Show abstract
+  if abstract-en != none {
+    page([
+      = Abstract
+      #abstract-en
+    ])
+  }
+  //Show abstract
+  if abstract-no != none {
+    page([
+      = Sammendrag
+      #abstract-no
+    ])
+  }
   //Show preface
   if preface != none {
-      page(preface)
+    page([
+      = Preface
+      #preface
+    ])
   } 
 
   // Display table of contents.
@@ -154,9 +162,67 @@
     set outline(indent: true, depth: 3)
     table-of-contents
   }
+  // Display list of figures
+  if figure-index.enabled {
+    outline(target: figure.where(kind: image), title: figure-index.title)
+  }
   
+  // Display list of tables
+  if table-index.enabled {
+    outline(target: figure.where(kind: table), title: table-index.title)
+  }
 
-  
+  // Display list of code listings
+  if listing-index.enabled {
+    outline(target: figure.where(kind: raw), title: listing-index.title)
+  }
+
+  // Configure page numbering and footer.
+  set page(
+    header: context {
+      // Get current page number.
+      let i = counter(page).at(here()).first()
+
+      // Align right for even pages and left for odd.
+      let is-odd = calc.odd(i)
+      let aln = if is-odd { right } else { left }
+
+      // Are we on a page that starts a chapter?
+      let target = heading.where(level: 1)
+      
+
+      // Find the chapter of the section we are currently in.
+      let before = query(target.before(here()))
+      if before.len() > 0 {
+        let current = before.last()
+        if query(target).any(it => it.location().page() == current.location().page() + 1) {
+          return
+        }
+        let chapter_number = counter(heading).at(here()).first()
+        if isappendix.get() {
+          chapter_number = numbering("A.1", chapter_number)
+        }
+        let chapter = emph(text(size: 10pt, current.supplement + [ #chapter_number: ] + current.body))
+        let display-title = []
+        if short-title != [] {
+          display-title = emph(text(size: 10pt, short-title))
+        } else {
+          display-title = emph(text(size: 10pt, title))
+        }
+        if current.numbering != none {
+            if is-odd {
+              columns(2,
+              [#align(left)[#chapter] #colbreak() #align(right)[#i]])
+            } else {
+              columns(2,
+              [#align(left)[#i] #colbreak() #align(right)[#display-title]])
+            }
+        }
+      }
+    },
+    footer: ""
+  )
+  // Style code snippets
   // Display inline code in a small box that retains the correct baseline.
   show raw.where(block: false): box.with(
     inset: (x: 3pt, y: 0pt),
@@ -175,7 +241,7 @@
     kind: raw
   ): set figure.caption(position: top)
 
-  // Configure proper numbering.
+  // Configure proper numbering of figures and equations.
   let numbering-fig = n => {
     let h1 = counter(heading).get().first()
     numbering("1.1", h1, n)
@@ -196,9 +262,8 @@
   set enum(numbering: "1.a.i.", spacing: 0.8em, indent: 1.2em)
   set list(spacing: 0.8em, indent: 1.2em, marker: ([•], [◦], [--]))
 
+  show: main-matter
   body
-  
-  
   
   //Style bibliography
   if bibliography != none {
@@ -212,10 +277,16 @@
 
 
 //Style appendix
-#let appendix(body) = {
+#let appendix(chapters-on-odd: false, body) = {
   set heading(numbering: "A.1")
+  set heading(supplement: [Appendix ])
   show heading: it => {
-    colbreak(weak: true)
+   if chapters-on-odd {
+      pagebreak(to: "odd", weak: true)
+    } else {
+      colbreak(weak: true)
+    }
+
     v(10%)
     if it.numbering != none {
       set text(size: 20pt)
