@@ -51,5 +51,5 @@ The template has many arguments you can specify:
 # Acknowledgements
 Thanks to: 
 - The creator of the [ILM template](https://github.com/talal/ilm/blob/main/lib.typ) which I used as the basis for this. 
-- The creators of the [NTNU thesis template](https://github.com/COPCSE-NTNU/thesis-NTNU)
+- The creators of the original [NTNU thesis template](https://github.com/COPCSE-NTNU/thesis-NTNU)
 - The creators of the [elsearticle template](https://github.com/maucejo/elsearticle) for their implementation of subfigures and appendix environment
