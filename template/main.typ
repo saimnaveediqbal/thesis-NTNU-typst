@@ -4,7 +4,7 @@
   title: [An NTNU Thesis typst template],
   short-title: [],
   authors: ("Anders Andersen", "Bjørn Bjørnsen"),
-  shortauthor: ("Andersen et. al."),
+  short-author: ("Andersen et. al."),
   titlepage: true,
   chapters-on-odd: chapters-on-odd,
   bibliography: bibliography("thesis.bib"),
