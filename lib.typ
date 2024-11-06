@@ -37,6 +37,8 @@
   short-title: [],
   authors: ("Author"),
   short-author: none,
+  font: "Charter",
+  raw-font: "DejaVu Sans Mono",
   paper-size: "a4",
   date: datetime.today(),
   date-format: "[day padding:zero]/[month repr:numerical]/[year repr:full]",
@@ -64,8 +66,8 @@
 ) =  {
   set document(title: title, author: authors)
   // Set text fonts and sizes
-  set text(font: "Charter", size: 11pt)
-  show raw: set text(font: "DejaVu Sans Mono", size: 9pt)
+  set text(font: font, size: 11pt)
+  show raw: set text(font: raw-font, size: 9pt)
   //Paper setup
   set page(
     paper: paper-size,
