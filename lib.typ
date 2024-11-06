@@ -93,8 +93,7 @@
     ]))
   }
   //Paragraph properties
-  set par(leading: 0.7em, justify: true, linebreaks: "optimized", first-line-indent: 1.2em)
-  show par: set block(spacing: 0.7em)
+  set par(spacing: 0.7em, leading: 0.7em, justify: true, linebreaks: "optimized", first-line-indent: 1.2em)
 
   //Properties for all headings (incl. subheadings)
   set heading(numbering: "1.1")
