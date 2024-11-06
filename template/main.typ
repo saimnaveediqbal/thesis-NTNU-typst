@@ -1,9 +1,10 @@
-#import "../lib.typ": *
+//#import "lib.typ": *
+#import "@preview/nifty-ntnu-thesis:0.1.1": *
 #let chapters-on-odd = false
-#show: ntnu-thesis.with(
+#show: nifty-ntnu-thesis.with(
   title: [An NTNU Thesis typst template],
   short-title: [],
-  authors: ("Anders Andersen", "Bjørn Bjørnsen"),
+  authors: ("Anders Andersen",),
   short-author: ("Andersen et. al."),
   titlepage: true,
   chapters-on-odd: chapters-on-odd,
@@ -12,14 +13,14 @@
   table-index: (enabled: true, title: "Tables"),
   listing-index: (enabled: true, title: "Code listings"),
   abstract-en: [
-    The `ntnu-thesis` template is a typst port of the `ntnuthesis` LaTeX class. It can be used for theses at all levels –
+    The `nifty-ntnu-thesis` template is a typst port of the `ntnuthesis` LaTeX class. It can be used for theses at all levels –
     bachelor, master and PhD – and is available in English (British and
     American) and Norwegian (Bokmål and Nynorsk). This document is ment to
     serve (i) as a description of the document class, (ii) as an example of
     how to use it, and (iii) as a thesis template.
   ],
   abstract-no: [
-    Malen `ntnu-thesis` er en typst-oversettelse av LaTeX-klassen `ntnuthesis`. Den er tilrettelagt for avhandlinger på alle nivåer –
+    Malen `nifty-ntnu-thesis` er en typst-oversettelse av LaTeX-klassen `ntnuthesis`. Den er tilrettelagt for avhandlinger på alle nivåer –
     bachelor, master og PhD – og er tilgjengelig på både norsk (bokmål og
     nynorsk) og engelsk (britisk og amerikansk). Dette dokumentet er ment å
     tjene (i) som en beskrivelse av dokumentklassen, (ii) som et eksempel på
@@ -41,7 +42,7 @@ it, and (iii) as a thesis template.
 == Thesis Setup
 <sec:setup>
 The document class is initialized by calling
-```typst #show: ntnu-thesis.with()``` at the beginning of your `.typ` file. Currently it only supports english. The `ntnu-thesis` function has a number of options you can set, most of which will be described in this document. The rest will be documented in this templates repository. 
+```typst #show: nifty-ntnu-thesis.with()``` at the beginning of your `.typ` file. Currently it only supports english. The `nifty-ntnu-thesis` function has a number of options you can set, most of which will be described in this document. The rest will be documented in this templates repository. 
 
 The titlepage at the beginning of this document is a placeholder to be used when writing
 the thesis. This should be removed before handing in the thesis, by settting `titlepage: false`.
@@ -51,9 +52,9 @@ for PhD.]
 
 == Title, Author, and Date
 <title-author-and-date>
-The title of your thesis should be set by changing the `title` parameter of the template. The title will appear on the titlepage as well as in the running header of the even numbered pages. If the title is too long for the header, you can use `shorttitle` to set a version for the header.
+The title of your thesis should be set by changing the `title` parameter of the template. The title will appear on the titlepage as well as in the running header of the even numbered pages. If the title is too long for the header, you can use `short-title` to set a version for the header.
 
-The authors should be listed with full names in the `authors` parameter. This is an array, with multiple authors separated by a comma. 
+The authors should be listed with full names in the `authors` parameter. This is an array, with multiple authors separated by a comma. As with the title, you can use `short-author` to set a version for the header.
 
 Use `date` to set the date of the document. It will only appear on
 the temporary title page. To keep track of temporary versions, it can be
@@ -628,7 +629,7 @@ share with the readers, can be put in appendices. See
 
 = Conclusion
 <conclusion>
-You definitely should use the `ntnu-thesis` typst template for your
+You definitely should use the `nifty-ntnu-thesis` typst template for your
 thesis.
 
 #show: appendix.with(chapters-on-odd: chapters-on-odd)
